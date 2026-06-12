@@ -14,9 +14,6 @@ EOF
 
 
 
-cd ~/fashion-pipeline
-cat >> data/README.md << 'EOF'
-
 ## raw/weather_sample.csv
 - 출처: 기상청 ASOS 일자료 조회 서비스 (AsosDalyInfoService, 지점코드 108-서울)
 - src/ingest/weather_ingestion.py 실행 결과, 2019-10-01 ~ 2019-10-31 전체 31일치
