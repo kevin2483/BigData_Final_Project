@@ -21,8 +21,6 @@ EOF
 EOF
 
 
-cd ~/fashion-pipeline
-cat >> data/README.md << 'EOF'
 
 ## processed/fashion_weather_mart_sample.csv
 - src/pipeline/spark_preprocess.py 실행 결과(Parquet, /user/maria_dev/processed_data/)에서
