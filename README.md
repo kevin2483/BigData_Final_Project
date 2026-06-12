@@ -118,3 +118,10 @@ beeline -u jdbc:hive2://localhost:10000 -n hive -f src/analyze/hive_analysis.sql
 
 # 매출 결정타
 날씨보다 프로모션 기간(10월 18일~24일)에 매출이 폭증함을 확인, 날씨는 유인 요인일 뿐 실질적인 구매 동인은 플랫폼 프로모션임을 검증.
+
+
+## AI Tool Usage
+-Claude: 데이터 샘플(data/raw, data/processed) 구성 및 git/HDFS/Docker 명령어 
+  실행 절차 안내, .gitignore 및 data/README.md 작성 보조
+- Gemini: 최종 보고서 표현 다듬기 및 구조 정리
+- Gemini: matplotlib 색상 팔레트 추천 (src/analyze/visualize_results.py)
