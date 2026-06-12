@@ -11,3 +11,14 @@ cat > data/README.md << 'EOF'
 > 전체 원본 데이터(약 195MB, 31일치)는 용량 문제로 .gitignore 처리하였으며,
 > 위 샘플은 데이터 구조 확인용.
 EOF
+
+
+
+cd ~/fashion-pipeline
+cat >> data/README.md << 'EOF'
+
+## raw/weather_sample.csv
+- 출처: 기상청 ASOS 일자료 조회 서비스 (AsosDalyInfoService, 지점코드 108-서울)
+- src/ingest/weather_ingestion.py 실행 결과, 2019-10-01 ~ 2019-10-31 전체 31일치
+- 컬럼: date, avg_temp, rainfall
+EOF
