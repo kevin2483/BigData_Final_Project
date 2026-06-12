@@ -1,0 +1,6 @@
+*.csv
+!data/raw/*_sample.csv
+!data/processed/*_sample.csv
+*.parquet
+__pycache__/
+*.pyc
