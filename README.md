@@ -81,11 +81,13 @@ ssh maria_dev@localhost -p 2222
 ### Step1: 데이터수집 및 자동화
 # Kaggle 대용량 데이터를 청크 단위로 스트리밍 처리하고 기상청 API와 결합하여 HDFS에 적재한다.
 
-#매일 새벽 2시 자동 적재 스케줄러 등록
+# 매일 새벽 2시 자동 적재 스케줄러 등록
 crontab -e
-#0 2 * * * /bin/bash /home/maria_dev/fashion-pipeline/src/ingest/daily_ingestion.sh >> /home/maria_dev/fashion-pipeline/src/ingest/ingestion.log 2>&1
 
-#수동 테스트 실행
+# [등록 명령어]
+0 2 * * * /bin/bash /home/maria_dev/fashion-pipeline/src/ingest/daily_ingestion.sh >> /home/maria_dev/fashion-pipeline/src/ingest/ingestion.log 2>&1
+
+# 수동 테스트 실행
 python3 src/ingest/weather_ingestion.py
 
 
@@ -93,17 +95,17 @@ python3 src/ingest/weather_ingestion.py
 ### Step 2: Spark 분산 데이터 전처리 (Processing)
 이기종 데이터를 날짜(dt) 기준으로 조인하고, Parquet 및 Snappy 압축을 적용하여 저장 효율을 최적화합니다.
 
-#PySpark 전처리 스크립트 실행
+# PySpark 전처리 스크립트 실행
 spark-submit --master local[*] src/pipeline/spark_preprocess.py
 
 
 ### Step 3: Hive 분석 마트 구축 및 분석 (Analysis)
 Ranger 보안 제약을 우회하여 HDFS 데이터를 연결하고 최종 분석을 수행합니다.
 
-#HDFS 권한 개방
+# HDFS 권한 개방
 hdfs dfs -chmod -R 777 /user/maria_dev/processed_data/
 
-#Beeline을 통한 분석 쿼리 수행
+# Beeline을 통한 분석 쿼리 수행
 beeline -u jdbc:hive2://localhost:10000 -n hive -f src/analyze/hive_analysis.sql
 
 
