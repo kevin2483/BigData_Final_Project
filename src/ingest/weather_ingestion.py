@@ -3,7 +3,10 @@ import json
 import csv
 import os
 
-api_key = "ab314545676ac386258ccd4ba199aa8d85fe384d7b6762e90d6cf7d66949e582"
+api_key = os.environ.get("KMA_API_KEY")
+if not api_key:
+    raise ValueError("환경변수 KMA_API_KEY가 설정되지 않았습니다.")
+    
 url = "http://apis.data.go.kr/1360000/AsosDalyInfoService/getWthrDataList"
 url += "?serviceKey=" + api_key
 url += "&pageNo=1&numOfRows=35&dataType=JSON&dataCd=ASOS&dateCd=DAY&startDt=20191001&endDt=20191031&stnIds=108"

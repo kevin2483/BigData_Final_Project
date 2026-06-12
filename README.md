@@ -120,8 +120,26 @@ beeline -u jdbc:hive2://localhost:10000 -n hive -f src/analyze/hive_analysis.sql
 날씨보다 프로모션 기간(10월 18일~24일)에 매출이 폭증함을 확인, 날씨는 유인 요인일 뿐 실질적인 구매 동인은 플랫폼 프로모션임을 검증.
 
 
+
+
+## 환경 설정
+실행 전 기상청 Open API 서비스키를 환경변수로 설정해야 합니다:
+```bash
+export KMA_API_KEY="발급받은_본인_API_키"
+```
+서비스키는 [공공데이터포털](https://www.data.go.kr)에서 발급받을 수 있습니다.
+
+
+
 ## AI Tool Usage
--Claude: 데이터 샘플(data/raw, data/processed) 구성 및 git/HDFS/Docker 명령어 
+
+- Claude: split_ecommerce.py에서 대용량 CSV 처리 시 chunksize 옵션 및 
+  메모리 효율적인 일자별 그룹화 방식에 대한 디버깅 조언,
+데이터 샘플(data/raw, data/processed) 구성 및 git/HDFS/Docker 명령어 
+
+-  Gemini: spark_preprocess.py에서 Spark DataFrame join 시 발생한 
+  컬럼 중복 오류 디버깅
   실행 절차 안내, .gitignore 및 data/README.md 작성 보조
+
 - Gemini: 최종 보고서 표현 다듬기 및 구조 정리
 - Gemini: matplotlib 색상 팔레트 추천 (src/analyze/visualize_results.py)
