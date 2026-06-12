@@ -26,7 +26,7 @@
 
 
 ## 3. 구현 계획 
-5주간의 프로젝트 일정을 다음과 같이 계획합니다.
+5주간의 프로젝트 일정을 다음과 같이 계획.
 
 * 11주차: 프로젝트 주제 선정, GitHub repo 초기 구조 세팅 및 README 작성
 * 12주차: 데이터 수집 스크립트 작성 및 HDFS/Spark 실습 환경(GCP Sandbox) 셋업 완료
@@ -36,3 +36,67 @@
 
 ## AI Tool Usage
 -gemini: 프로젝트 기술 스택 조합 브레인스토밍, 문장 교정
+
+
+
+
+
+## 대용량 이커머스 행동 로그와 기상 공공데이터를 결합한 패션 수요 패턴 및 전환율 분석 파이프라인
+
+**빅데이터 프로그래밍 최종 결과물 (학번: 60211675 / 이름: 안정재)**
+
+본 프로젝트는 대규모 이커머스 유저 행동 로그(Kaggle)와 기상청 공공 데이터를 결합하여, 날씨 변화에 따른 패션 카테고리별 수요 패턴 및 구매 전환율(CVR)의 상관관계를 다중 분산 환경에서 분석한 End-to-End 빅데이터 파이프라인입니다.
+
+---
+
+## 1. 문제 정의 (Problem Definition)
+현대 패션 이커머스 시장에서는 단순 조회수를 넘어, 실제 구매로 이어지는 전환율을 최적화하는 것이 핵심 과제입니다. 특히 의류 소비는 기상 변화(기온, 강수량 등)에 민감하다는 가설을 바탕으로, 데이터를 통해 실제 상관관계를 분석하고 비즈니스 인사이트를 도출하고자 합니다.
+
+## 2. 시스템 아키텍처 및 기술 스택
+본 시스템은 데이터 수집부터 분석까지 분산 처리 프레임워크를 활용하여 자동화된 파이프라인으로 구성되었습니다.
+
+- **인프라**: GCP Compute Engine (CentOS 7) + HDP Sandbox v2.6.5
+- **수집/자동화**: Python (Kaggle API, Open API), Linux Crontab, Bash
+- **저장**: HDFS (Hadoop Distributed File System)
+- **처리/분석**: Apache Spark (PySpark), Apache Hive (HiveQL)
+
+
+
+---
+
+## 3. 🚀 하둡 파이프라인 구동 가이드
+
+### Step 0: 환경 설정
+```bash
+#GCP 인스턴스 SSH 접속
+ssh -i ~/.ssh/gcp_key jeongjae2483@<GCP_EXTERNAL_IP>
+
+# DP Sandbox maria_dev 계정 진입
+ssh maria_dev@localhost -p 2222
+
+
+
+### Step1: 데이터수집 및 자동화
+#Kaggle 대용량 데이터를 청크 단위로 스트리밍 처리하고 기상청 API와 결합하여 HDFS에 적재합니다.
+#매일 새벽 2시 자동 적재 스케줄러 등록
+crontab -e
+#0 2 * * * /bin/bash /home/maria_dev/fashion-pipeline/src/ingest/daily_ingestion.sh >> /home/maria_dev/fashion-pipeline/src/ingest/ingestion.log 2>&1
+
+#수동 테스트 실행
+python3 src/ingest/weather_ingestion.py
+
+
+
+### Step 2: Spark 분산 데이터 전처리 (Processing)
+이기종 데이터를 날짜(dt) 기준으로 조인하고, Parquet 및 Snappy 압축을 적용하여 저장 효율을 최적화합니다.
+
+# PySpark 전처리 스크립트 실행
+spark-submit --master local[*] src/pipeline/spark_preprocess.py
+
+###Step 3: Hive 분석 마트 구축 및 분석 (Analysis)
+Ranger 보안 제약을 우회하여 HDFS 데이터를 연결하고 최종 분석을 수행합니다.
+# HDFS 권한 개방
+hdfs dfs -chmod -R 777 /user/maria_dev/processed_data/
+
+# Beeline을 통한 분석 쿼리 수행
+beeline -u jdbc:hive2://localhost:10000 -n hive -f src/analyze/hive_analysis.sql
