@@ -66,14 +66,15 @@
 
 ## 3. 하둡 파이프라인 구동 가이드
 
-
 ### Step 0: 환경 설정
-# ```bash
-#GCP 인스턴스 SSH 접속
+GCP 인스턴스에 접속하여 HDP 샌드박스 환경을 준비합니다.
+
+```bash
+# GCP 인스턴스 SSH 접속
 ssh -i ~/.ssh/gcp_key jeongjae2483@<GCP_EXTERNAL_IP>
 
-#DP Sandbox maria_dev 계정 진입
-ssh maria_dev@localhost -p 2222 ```
+# HDP Sandbox maria_dev 계정 진입
+ssh maria_dev@localhost -p 2222
 
 
 
